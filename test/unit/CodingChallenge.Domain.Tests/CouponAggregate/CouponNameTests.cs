@@ -26,15 +26,15 @@ public sealed class CouponNameTests
     {
         // Arrange
         var faker = new Faker();
-        var name = faker.Random.String(CouponName.MaxLength + 1);
+        var value = faker.Random.String(CouponName.MaxLength + 1);
 
-        Action act = () => new CouponName(name);
+        Action act = () => new CouponName(value);
 
         //Act+Assert
         act
             .Should()
             .Throw<DomainException>()
-            .WithMessage($"A coupon name '{name}' with length '{name.Length}' exceeds maximum allowed length of '{CouponName.MaxLength}' characters.!");
+            .WithMessage($"A coupon name '{value}' with length '{value.Length}' exceeds maximum allowed length of '{CouponName.MaxLength}' characters.!");
     }
 
     [Fact]

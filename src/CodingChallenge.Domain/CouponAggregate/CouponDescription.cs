@@ -2,13 +2,21 @@
 
 public sealed record CouponDescription
 {
-    public readonly int MaxLength = 250;
+    public static readonly int MaxLength = 250;
 
     public CouponDescription(string value)
     {
-        Value = value;
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            throw new DomainException("A coupon description can't be null or empty!");
+        }
 
-        throw new NotImplementedException();
+        if (value.Length > MaxLength)
+        {
+            throw new DomainException($"A coupon description '{value}' with length '{value.Length}' exceeds maximum allowed length of '{MaxLength}' characters.!");
+        }
+
+        Value = value;
     }
 
     public string Value { get; private set; }

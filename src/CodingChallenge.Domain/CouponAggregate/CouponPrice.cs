@@ -4,9 +4,12 @@ public sealed record CouponPrice
 {
     public CouponPrice(decimal value)
     {
-        Value = value;
+        if (value <= 0.0m)
+        {
+            throw new DomainException($"A coupon price (which is '{value}') can't be 0 or negative value!");
+        }
 
-        throw new NotImplementedException();
+        Value = value;
     }
 
     public decimal Value { get; private set; }

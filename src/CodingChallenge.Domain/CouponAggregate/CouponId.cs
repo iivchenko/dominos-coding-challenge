@@ -4,9 +4,12 @@ public sealed record CouponId
 {
     public CouponId(Guid value)
     {
-        Value = value;
+        if (value == Guid.Empty)
+        {
+            throw new DomainException("A coupon id can't be empty!");
+        }
 
-        throw new NotImplementedException();
+        Value = value;
     }
 
     public Guid Value { get; private set; }

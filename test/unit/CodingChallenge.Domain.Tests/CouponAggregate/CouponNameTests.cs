@@ -1,7 +1,5 @@
-﻿using Bogus;
-using CodingChallenge.Domain.Common;
+﻿using CodingChallenge.Domain.Common;
 using CodingChallenge.Domain.CouponAggregate;
-using FluentAssertions;
 
 namespace CodingChallenge.Domain.Tests.CouponAggregate;
 
@@ -47,8 +45,8 @@ public sealed class CouponNameTests
         var value = faker.Random.String(CouponName.MaxLength);
 
         // Act
-        var name = new CouponName(value);
+        var sut = new CouponName(value);
         // Assert
-        name.Value.Should().Be(value);
+        sut.Value.Should().Be(value);
     }
 }

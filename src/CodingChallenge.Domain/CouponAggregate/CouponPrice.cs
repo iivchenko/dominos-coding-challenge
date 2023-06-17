@@ -13,4 +13,14 @@ public sealed record CouponPrice
     }
 
     public decimal Value { get; private set; }
+
+    public static implicit operator decimal(CouponPrice price)
+    {
+        return price.Value;
+    }
+
+    public static implicit operator CouponPrice(decimal price)
+    {
+        return new CouponPrice(price);
+    }
 }

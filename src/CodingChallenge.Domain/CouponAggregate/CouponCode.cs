@@ -27,4 +27,14 @@ public sealed record CouponCode : IEquatable<CouponCode>
     {
         return string.GetHashCode(Value, StringComparison.InvariantCultureIgnoreCase);
     }
+
+    public static implicit operator string(CouponCode code)
+    {
+        return code.Value;
+    }
+
+    public static implicit operator CouponCode(string code)
+    {
+        return new CouponCode(code);
+    }
 }

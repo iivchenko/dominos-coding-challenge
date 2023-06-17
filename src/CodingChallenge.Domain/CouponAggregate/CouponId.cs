@@ -13,4 +13,14 @@ public sealed record CouponId
     }
 
     public Guid Value { get; private set; }
+
+    public static implicit operator Guid(CouponId id)
+    {
+        return id.Value;
+    }
+
+    public static implicit operator CouponId(Guid id)
+    {
+        return new CouponId(id);
+    }
 }

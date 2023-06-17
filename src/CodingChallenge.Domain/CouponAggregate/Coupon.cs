@@ -30,48 +30,72 @@ public sealed class Coupon : IAggregateRoot<CouponId>
 
     public void UpdateName(CouponName name)
     {
-        throw new NotImplementedException();
+        Name = name ?? throw new ArgumentNullException(nameof(name));
     }
 
     public void UpdateDescription(CouponDescription description)
     {
-        throw new NotImplementedException();
+        Description = description ?? throw new ArgumentNullException(nameof(description));
     }
 
     public void UpdatePrice(CouponPrice price)
     {
-        throw new NotImplementedException();
+        Price = price ?? throw new ArgumentNullException(nameof(price));
     }
 
-    public void UpdateMaxUsage(int usage)
+    public void UpdateMaxUsages(int maxUsages)
     {
-        // iivc comment: 
-        // Requirenments
-        // When MaxUsages is set to 0, it means that the coupon can be applied an infinite number of times.
-
-        throw new NotImplementedException();
+        if (Usage.MaxUsages != maxUsages)
+        {
+            if (maxUsages >= Usage.Usages || maxUsages == 0)
+            {
+                Usage = new CouponUsage(maxUsages, Usage.Usages);
+            }
+            else
+            {
+                throw new DomainException($"Can't update max usages for Coupon with id '{Id}' as expected max usages '{maxUsages}' less than actual usages '{Usage.Usages}'!");
+            }
+        }
     }
 
     public void IncrementUsage()
     {
-        // iivc comment: 
-        // Requirenments
-        // Usages can only be incremented / decremented by 1 at a time.
-
-        throw new NotImplementedException();
+        if (Usage.MaxUsages == 0 || Usage.Usages < Usage.MaxUsages)
+        {
+            Usage = new CouponUsage(Usage.MaxUsages, Usage.Usages + 1);
+        }
+        else
+        {
+            throw new DomainException($"Can't increment usages for Coupon with id '{Id}' as Coupon already depleted all available usages: max usages '{Usage.MaxUsages}', usages '{Usage.Usages}'!");
+        }
     }
 
     public void DecrementUsage()
     {
-        // iivc comment: 
-        // Requirenments
-        // Usages can only be incremented / decremented by 1 at a time.
-
-        throw new NotImplementedException();
+        Usage = new CouponUsage(Usage.MaxUsages, Usage.Usages - 1);        
     }
 
-    public static Coupon Create(Guid id, string name, string description, string code, decimal price, int maxUsages, IEnumerable<string> productCodes)
+    public void UpdateProductCodes(CouponProductCodes productCodes)
     {
-        throw new NotImplementedException();
+        ProductCodes = productCodes ?? throw new ArgumentNullException(nameof(productCodes));
+    }
+
+    public static Coupon Create(
+        Guid id, 
+        string name, 
+        string description, 
+        string code, 
+        decimal price,
+        int maxUsages,
+        IEnumerable<string> productCodes)
+    {
+        return new Coupon(
+            id,
+            name,
+            description,
+            code,
+            price,
+            new CouponUsage(maxUsages, 0),
+            productCodes.ToProductCodes());
     }
 }

@@ -20,4 +20,14 @@ public sealed record CouponName
     }
 
     public string Value { get; private set; }
+
+    public static implicit operator string(CouponName name)
+    {
+        return name.Value;
+    }
+
+    public static implicit operator CouponName(string name)
+    {
+        return new CouponName(name);
+    }
 }

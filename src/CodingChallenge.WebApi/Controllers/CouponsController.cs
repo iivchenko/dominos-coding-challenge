@@ -1,7 +1,11 @@
 using System.Net.Mime;
 using System.Text;
 using System.Text.Json;
+using CodingChallenge.Application.Commands.CreateOrUpdateCoupon;
+using CodingChallenge.Application.Queries.GetCouponByCode;
+using CodingChallenge.Application.Queries.GetCouponById;
 using CodingChallenge.WebApi.Models;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodingChallenge.WebApi.Controllers;
@@ -10,32 +14,89 @@ namespace CodingChallenge.WebApi.Controllers;
 [Route("[controller]")]
 public class CouponsController : ControllerBase
 {
-    private readonly ILogger<CouponsController> _logger;
+    private readonly IMediator _mediator;
 
-    public CouponsController(ILogger<CouponsController> logger)
+    public CouponsController(IMediator mediator)
     {
-        _logger = logger;
+        _mediator = mediator;
     }
 
     [HttpGet]
     [Route("")]
     public async Task<ActionResult<Coupon>> GetCouponByCouponCode(string couponCode)
     {
-        return Ok(new Coupon(Guid.NewGuid(), "Name", "Description", couponCode, 10.1, 1, 1, new[] { "AA", "BB" }));
+        var query = new GetCouponByCodeQuery(couponCode);
+        var queryResponse = await _mediator.Send(query);
+        var response = new Coupon(
+            queryResponse.Id,
+            queryResponse.Name,
+            queryResponse.Description,
+            queryResponse.Code,
+            (double)queryResponse.Price,
+            queryResponse.MaxUsages,
+            queryResponse.Usages,
+            queryResponse.ProductCodes.ToArray());
+
+        return Ok(response);
     }
 
     [HttpGet]
     [Route("{id}")]
     public async Task<ActionResult<Coupon>> GetCoupon(Guid id)
     {
-        return Ok(new Coupon(id, "Name", "Description", "123", 10.1, 1, 1, new[] { "AA", "BB" }));
+        var query = new GetCouponByIdQuery(id);
+        var queryResponse = await _mediator.Send(query);
+        var response = new Coupon(
+           queryResponse.Id,
+           queryResponse.Name,
+           queryResponse.Description,
+           queryResponse.Code,
+           (double)queryResponse.Price,
+           queryResponse.MaxUsages,
+           queryResponse.Usages,
+           queryResponse.ProductCodes.ToArray());
+
+        return Ok(response);
     }
 
     [HttpPut]
     [Route("{id}")]
     public async Task<ActionResult> CreateOrUpdateCoupon(Guid id, [FromBody] Coupon request)
     {
-        return Ok();
+        if (id != request.Id)
+        {
+            return BadRequest($"Rout id '{id}' must be the same as body id '{request.Id}'");
+        }
+
+        var command = new CreateOrUpdateCouponCommand(
+           request.Id,
+           request.Name,
+           request.Description,
+           request.CouponCode,
+           (decimal)request.Price,
+           request.MaxUsages,
+           request.Usages,
+           request.ProductCodes);
+
+        var commandResponse = await _mediator.Send(command);
+
+        var response = new Coupon(
+           commandResponse.Id,
+           commandResponse.Name,
+           commandResponse.Description,
+           commandResponse.Code,
+           (double)commandResponse.Price,
+           commandResponse.MaxUsages,
+           commandResponse.Usages,
+           commandResponse.ProductCodes.ToArray());
+
+
+        return commandResponse.Status switch
+        {
+            CreateOrUpdateCouponCommandResponseStatus.Created => Created($"/coupons/{response.Id}", response),
+            CreateOrUpdateCouponCommandResponseStatus.Updated => Ok(response),
+            _ => BadRequest($"Unknown status '{commandResponse.Status}'!")
+        };
     }
 
     #region All code below is not going to be reviewed. This is just some helpers to load the data.

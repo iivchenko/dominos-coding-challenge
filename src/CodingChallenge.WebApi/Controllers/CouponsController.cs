@@ -63,6 +63,12 @@ public class CouponsController : ControllerBase
     [Route("{id}")]
     public async Task<ActionResult> CreateOrUpdateCoupon(Guid id, [FromBody] Coupon request)
     {
+        // iivc comment:
+        // I can't change APIs per requirenments, and I don't know how the 'Automation Tests' from Domon's
+        // team works so I assume the most strict scenario - id from the rount and body
+        // must be equal and used during creation/update.
+        // I personaly would split api into two separate: one for create (without any sort of ID in rout or body)
+        // and another for update with mandatory id in the rout and no id in the body. 
         if (id != request.Id)
         {
             return BadRequest($"Rout id '{id}' must be the same as body id '{request.Id}'");

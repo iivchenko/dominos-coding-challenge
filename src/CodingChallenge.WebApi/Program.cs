@@ -1,4 +1,4 @@
-using Microsoft.OpenApi.Models;
+using CodingChallenge.Infrastructure;
 
 namespace CodingChallenge.WebApi;
 
@@ -6,44 +6,16 @@ public sealed class Program
 {
     public static Task Main(string[] args)
     {
-        var builder = WebApplication
-            .CreateBuilder(args);
-
-        // Add services to the container.
+        var builder = WebApplication.CreateBuilder(args);
 
         builder
             .Services
-            .AddControllers();
-
-        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder
-            .Services
-            .AddEndpointsApiExplorer();
-        builder
-            .Services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Coupon", Version = "v1" });
-                c.AddSecurityDefinition("ApiKey",
-                    new OpenApiSecurityScheme
-                    {
-                        Description = "ApiKey must appear in header",
-                        Type = SecuritySchemeType.ApiKey,
-                        Name = "X-API-KEY",
-                        In = ParameterLocation.Header,
-                        Scheme = "ApiKeyScheme"
-                    });
-                var key = new OpenApiSecurityScheme
-                {
-                    Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "ApiKey" },
-                    In = ParameterLocation.Header
-                };
-                var requirement = new OpenApiSecurityRequirement { { key, new List<string>() } };
-                c.AddSecurityRequirement(requirement);
-            });
+            .AddInfrastructureServices(builder.Configuration)
+            .AddApplicationServices()
+            .AddWebApiServices();
 
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
@@ -51,10 +23,20 @@ public sealed class Program
         }
 
         app.UseHttpsRedirection();
-
         app.UseAuthorization();
-
         app.MapControllers();
+
+        // iivc comment:
+        // This is not very good practice and better to have EF Migrations in place 
+        // but I opt to this piece of code make things easy to run from stractch 
+        // without manual DB creation and to save some development time.
+        using (var serviceScope = app.Services.GetService<IServiceScopeFactory>().CreateScope())
+        {
+            var context = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            context.Database.EnsureCreated();
+
+            context.SaveChanges();
+        }
 
         return app.RunAsync();
     }

@@ -29,6 +29,6 @@ public sealed class GetCouponByCodeQueryHandler : IRequestHandler<GetCouponByCod
             coupon.Price,
             coupon.Usage.MaxUsages,
             coupon.Usage.Usages,
-            coupon.ProductCodes.Values);
+            coupon.ProductCodes.Select(x => x.Value));
     }
 }

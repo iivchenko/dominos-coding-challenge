@@ -1,16 +1,29 @@
-﻿namespace CodingChallenge.Domain.CouponAggregate;
+﻿using System.Collections.ObjectModel;
 
-public sealed class Coupon : IAggregateRoot<CouponId>
+namespace CodingChallenge.Domain.CouponAggregate;
+
+public sealed class Coupon : IAggregateRoot<Guid>
 {
+    private Coupon()
+    {
+    }
+
     private Coupon(
-        CouponId id, 
+        Guid id, 
         CouponName name, 
         CouponDescription description, 
         CouponCode code, 
         CouponPrice price, 
         CouponUsage usage,
-        CouponProductCodes productCodes)
+        IReadOnlyCollection<CouponProductCode> productCodes)
     {
+        if (id == Guid.Empty)
+        {
+            throw new DomainException("A coupon id can't be empty!");
+        }
+
+        ValidateProductCodes(productCodes);
+
         Id = id;
         Name = name;
         Description = description;
@@ -20,13 +33,13 @@ public sealed class Coupon : IAggregateRoot<CouponId>
         ProductCodes = productCodes;
     }
 
-    public CouponId Id { get; private set; }
+    public Guid Id { get; private set; }
     public CouponName Name { get; private set; }
     public CouponDescription Description { get; private set; }
     public CouponCode Code { get; private set; }
     public CouponPrice Price { get; private set; }
     public CouponUsage Usage { get; private set; }
-    public CouponProductCodes ProductCodes { get; private set; }
+    public IReadOnlyCollection<CouponProductCode> ProductCodes { get; private set; }
 
     public void UpdateName(CouponName name)
     {
@@ -75,9 +88,26 @@ public sealed class Coupon : IAggregateRoot<CouponId>
         Usage = new CouponUsage(Usage.MaxUsages, Usage.Usages - 1);        
     }
 
-    public void UpdateProductCodes(CouponProductCodes productCodes)
+    public void UpdateProductCodes(IEnumerable<CouponProductCode> productCodes)
     {
-        ProductCodes = productCodes ?? throw new ArgumentNullException(nameof(productCodes));
+        ValidateProductCodes(productCodes);
+
+        ProductCodes = new ReadOnlyCollection<CouponProductCode>(productCodes.ToArray());
+    }
+
+    private static void ValidateProductCodes(IEnumerable<CouponProductCode> productCodes)
+    {
+        if (productCodes == null || !productCodes.Any())
+        {
+            throw new DomainException("A coupon product codes can't be null or empty!");
+        }
+
+        var duplicates = productCodes.GroupBy(x => x).Where(x => x.Count() > 1);
+
+        if (duplicates.Any())
+        {
+            throw new DomainException($"""A coupon product codes have duplicates: {string.Join(", ", duplicates.Select(x => x.Key.Value))}!""");
+        }
     }
 
     public static Coupon Create(

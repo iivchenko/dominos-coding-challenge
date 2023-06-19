@@ -37,7 +37,7 @@ public sealed class CreateOrUpdateCouponCommandHandlerTests
             coupon.Price,
             coupon.Usage.MaxUsages,
             coupon.Usage.Usages,
-            coupon.ProductCodes.Values);
+            coupon.ProductCodes.Select(x => x.Value));
 
         _couponRepositoryMock
             .Setup(x => x.Create(It.IsAny<Coupon>()))
@@ -54,7 +54,7 @@ public sealed class CreateOrUpdateCouponCommandHandlerTests
         response.Price.Should().Be(coupon.Price);
         response.MaxUsages.Should().Be(coupon.Usage.MaxUsages);
         response.Usages.Should().Be(coupon.Usage.Usages);
-        response.ProductCodes.Should().BeEquivalentTo(coupon.ProductCodes.Values);
+        response.ProductCodes.Should().BeEquivalentTo(coupon.ProductCodes.Select(x => x.Value));
     }
 
     [Fact]

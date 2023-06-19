@@ -64,6 +64,6 @@ public sealed class CreateOrUpdateCouponCommandHandler : IRequestHandler<CreateO
             coupon.Price,
             coupon.Usage.MaxUsages,
             coupon.Usage.Usages,
-            coupon.ProductCodes.Values);
+            coupon.ProductCodes.Select(x => x.Value));
     }
 }

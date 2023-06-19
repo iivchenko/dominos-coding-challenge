@@ -1,7 +1,5 @@
-﻿using Bogus.DataSets;
-using CodingChallenge.Domain.Common;
+﻿using CodingChallenge.Domain.Common;
 using CodingChallenge.Domain.CouponAggregate;
-using FluentAssertions;
 
 namespace CodingChallenge.Domain.Tests.CouponAggregate;
 
@@ -29,6 +27,19 @@ public sealed class CouponTests
     private const decimal Price = 100.0m;
     private const string ProductCode1 = "Product_01";
     private const string ProductCode2 = "Product_02";
+
+    [Fact]
+    public void Create_IdIsEmpty_Throws()
+    {
+        // Arrange
+        Action act = () => CreateCoupon(id: Guid.Empty);
+
+        // Act+Assert
+        act
+            .Should()
+            .Throw<DomainException>()
+            .WithMessage("A coupon id can't be empty!");
+    }
 
     [Theory]
     [InlineData(null)]
@@ -70,14 +81,14 @@ public sealed class CouponTests
             expectedProductCodes);
 
         // Assert
-        sut.Id.Value.Should().Be(expectedId);
+        sut.Id.Should().Be(expectedId);
         sut.Name.Value.Should().Be(expectedName);
         sut.Description.Value.Should().Be(expectedDescription);
         sut.Code.Value.Should().Be(expectedCode);
         sut.Price.Value.Should().Be(expectedPrice);
         sut.Usage.MaxUsages.Should().Be(expectedMaxUsages);
         sut.Usage.Usages.Should().Be(expectedUsages);
-        sut.ProductCodes.Values.Should().BeEquivalentTo(expectedProductCodes);
+        sut.ProductCodes.Should().BeEquivalentTo(expectedProductCodes.ToProductCodes());
     }
 
     [Fact]
@@ -85,8 +96,8 @@ public sealed class CouponTests
     {
         // Arrange
         var originalName = "Some Good Name";
-        var coupon = CreateCoupon(name: originalName);
-        Action act = () => coupon.UpdateName(null);
+        var sut = CreateCoupon(name: originalName);
+        Action act = () => sut.UpdateName(null);
 
         // Act+Assert
         act
@@ -94,7 +105,7 @@ public sealed class CouponTests
             .Throw<ArgumentNullException>()
             .WithParameterName("name");
 
-        coupon.Name.Value.Should().Be(originalName);
+        sut.Name.Value.Should().Be(originalName);
     }
 
     [Fact]
@@ -103,13 +114,13 @@ public sealed class CouponTests
         // Arrange
         var originalMaxUsages = 10;
         var expectedMaxUsages = 10;
-        var coupon = CreateCoupon(maxUsages: originalMaxUsages);
+        var sut = CreateCoupon(maxUsages: originalMaxUsages);
 
         // Act
-        coupon.UpdateMaxUsages(expectedMaxUsages);
+        sut.UpdateMaxUsages(expectedMaxUsages);
 
         // Assert
-        coupon.Usage.MaxUsages.Should().Be(expectedMaxUsages);
+        sut.Usage.MaxUsages.Should().Be(expectedMaxUsages);
     }
 
     [Fact]
@@ -118,15 +129,15 @@ public sealed class CouponTests
         // Arrange
         var originalMaxUsages = 10;
         var expectedMaxUsages = 0;
-        var coupon = CreateCoupon(maxUsages: originalMaxUsages);
+        var sut = CreateCoupon(maxUsages: originalMaxUsages);
 
-        coupon.IncrementUsage();
+        sut.IncrementUsage();
 
         // Act
-        coupon.UpdateMaxUsages(expectedMaxUsages);
+        sut.UpdateMaxUsages(expectedMaxUsages);
 
         // Assert
-        coupon.Usage.MaxUsages.Should().Be(expectedMaxUsages);
+        sut.Usage.MaxUsages.Should().Be(expectedMaxUsages);
     }
 
     [Fact]
@@ -135,22 +146,97 @@ public sealed class CouponTests
         // Arrange
         var originalMaxUsages = 2;
         var badMaxUsages = 1;
-        var coupon = CreateCoupon(maxUsages: originalMaxUsages);
+        var sut = CreateCoupon(maxUsages: originalMaxUsages);
 
-        coupon.IncrementUsage();
-        coupon.IncrementUsage();
+        sut.IncrementUsage();
+        sut.IncrementUsage();
 
         // Act
-        Action act = () => coupon.UpdateMaxUsages(badMaxUsages);
+        Action act = () => sut.UpdateMaxUsages(badMaxUsages);
 
         // Assert
         act
            .Should()
            .Throw<DomainException>()
-           .WithMessage($"Can't update max usages for Coupon with id '{coupon.Id}' as expected max usages '{badMaxUsages}' less than actual usages '{coupon.Usage.Usages}'!");
+           .WithMessage($"Can't update max usages for Coupon with id '{sut.Id}' as expected max usages '{badMaxUsages}' less than actual usages '{sut.Usage.Usages}'!");
+    }
+
+    [Fact]
+    public void UpdateProductCodes_ValueIsNull_Throws()
+    {
+        // Arrange
+        var sut = CreateCoupon();
+
+        Action act = () => sut.UpdateProductCodes(null);
+
+        // Act+Assert
+        act
+            .Should()
+            .Throw<DomainException>()
+            .WithMessage("A coupon product codes can't be null or empty!");
+    }
+
+    [Fact]
+    public void UpdateProductCodes_ValueIsEmpty_Throws()
+    {
+        // Arrange
+        var sut = CreateCoupon();
+
+        Action act = () => sut.UpdateProductCodes(Enumerable.Empty<CouponProductCode>());
+
+        // Act+Assert
+        act
+            .Should()
+            .Throw<DomainException>()
+            .WithMessage("A coupon product codes can't be null or empty!");
+    }
+
+    [Fact]
+    public void UpdateProductCodes_ValueContainsDuplicates_Throws()
+    {
+        // Arrange 
+        var productCodes = new[]
+        {
+            new CouponProductCode("Product1"),
+            new CouponProductCode("Product2"),
+            new CouponProductCode("Product3"),
+            new CouponProductCode("Product1"), // dublicate
+            new CouponProductCode("Product3")  // dublicate
+        };
+
+        var coupon = CreateCoupon();
+
+        Action act = () => coupon.UpdateProductCodes(productCodes);
+
+        // Act+Assert
+        act
+            .Should()
+            .Throw<DomainException>()
+            .WithMessage($"A coupon product codes have duplicates: Product1, Product3!");
+    }
+
+    [Fact]
+    public void UpdateProductCodes_ValidValue_SetsValueProperty()
+    {
+        // Arrange 
+        var productCodes = new[]
+        {
+            new CouponProductCode("Product4"),
+            new CouponProductCode("Product5"),
+            new CouponProductCode("Product6")
+        };
+
+        var sut = CreateCoupon();
+
+        // Act 
+        sut.UpdateProductCodes(productCodes);
+
+        // Assert
+        sut.ProductCodes.Should().BeEquivalentTo(productCodes);
     }
 
     private static Coupon CreateCoupon(
+        Guid? id = null,
         string name = Name, 
         string description = Description, 
         string code = Code,
@@ -158,6 +244,6 @@ public sealed class CouponTests
         decimal price = Price,
         params string[] productCodes)
     {
-        return Coupon.Create(Guid.NewGuid(), name, description, code, price, maxUsages, productCodes.Any() ? productCodes : new[] { ProductCode1, ProductCode2 });
+        return Coupon.Create(id ?? Guid.NewGuid(), name, description, code, price, maxUsages, productCodes.Any() ? productCodes : new[] { ProductCode1, ProductCode2 });
     }
 }

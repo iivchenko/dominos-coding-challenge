@@ -1,9 +1,13 @@
-﻿namespace CodingChallenge.Domain.CouponAggregate;
+﻿using System.Collections.ObjectModel;
+
+namespace CodingChallenge.Domain.CouponAggregate;
 
 public static class CouponProductCodesExtensions
 {
-    public static CouponProductCodes ToProductCodes(this IEnumerable<string> productcodes)
+    public static IReadOnlyCollection<CouponProductCode> ToProductCodes(this IEnumerable<string> productcodes)
     {
-        return new CouponProductCodes(productcodes);
+        var codes = productcodes.Select(x => new CouponProductCode(x)).ToArray();
+
+        return new ReadOnlyCollection<CouponProductCode>(codes);
     }
 }

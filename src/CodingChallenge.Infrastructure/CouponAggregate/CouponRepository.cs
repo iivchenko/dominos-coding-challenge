@@ -21,7 +21,7 @@ public sealed class CouponRepository : ICouponRepository
 
     public async Task<Coupon?> FindByCode(CouponCode code)
     {
-        return await _context.Coupons.SingleOrDefaultAsync(x => x.Code == code);
+        return await _context.Coupons.SingleOrDefaultAsync(x => x.Code.Value == code.Value);
     }
 
     public async Task<Coupon> Create(Coupon coupon)

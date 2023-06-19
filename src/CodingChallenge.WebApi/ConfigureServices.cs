@@ -1,6 +1,6 @@
 ﻿using Microsoft.OpenApi.Models;
 
-namespace CodingChallenge.WebApi;
+namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ConfigureServices
 {

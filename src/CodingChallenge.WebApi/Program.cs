@@ -1,6 +1,4 @@
 using CodingChallenge.Infrastructure;
-using CodingChallenge.WebApi;
-using CodingChallenge.WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,17 +10,18 @@ builder
 
 var app = builder.Build();
 
-app.UseMiddleware<ExceptionHandlingMiddleware>();
-
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-app.UseMiddleware<ApiKeyAuthMiddleware>();
-app.UseAuthorization();
+app
+    .UseHttpsRedirection()
+    .UseApiKeyAuthentication()
+    .UseAppExceptionHandling()
+    .UseAuthorization();
+
 app.MapControllers();
 
 // iivc comment:

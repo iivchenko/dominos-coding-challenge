@@ -1,7 +1,7 @@
 ﻿using CodingChallenge.Domain.Common;
 using FluentValidation;
 using System.Text.Json;
-namespace CodingChallenge.WebApi;
+namespace CodingChallenge.WebApi.Middlewares;
 
 public sealed class ExceptionHandlingMiddleware
 {
@@ -25,7 +25,7 @@ public sealed class ExceptionHandlingMiddleware
             var error = new
             {
                 ErrorCode = StatusCodes.Status400BadRequest,
-                Message = e.Message
+                e.Message
             };
 
             await context.Response.WriteAsync(JsonSerializer.Serialize(error));
@@ -37,7 +37,7 @@ public sealed class ExceptionHandlingMiddleware
             var error = new
             {
                 ErrorCode = StatusCodes.Status400BadRequest,
-                Message = e.Message
+                e.Message
             };
 
             await context.Response.WriteAsync(JsonSerializer.Serialize(error));

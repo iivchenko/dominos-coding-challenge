@@ -3,9 +3,8 @@ using CodingChallenge.Infrastructure;
 using CodingChallenge.Infrastructure.CouponAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 
-namespace CodingChallenge.WebApi;
+namespace Microsoft.Extensions.DependencyInjection;
 
 public static class ConfigureServices
 {

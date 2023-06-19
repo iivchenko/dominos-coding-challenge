@@ -1,5 +1,6 @@
 using CodingChallenge.Infrastructure;
 using CodingChallenge.WebApi;
+using CodingChallenge.WebApi.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -20,6 +21,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseMiddleware<ApiKeyAuthMiddleware>();
 app.UseAuthorization();
 app.MapControllers();
 

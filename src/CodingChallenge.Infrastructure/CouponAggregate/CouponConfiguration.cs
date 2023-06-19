@@ -33,7 +33,8 @@ public sealed class CouponConfiguration : IEntityTypeConfiguration<Coupon>
 
         builder
             .OwnsOne(x => x.Code)
-            .HasIndex(x => x.Value);
+            .HasIndex(x => x.Value)
+            .IsUnique();
 
         builder
             .OwnsOne(x => x.Price)

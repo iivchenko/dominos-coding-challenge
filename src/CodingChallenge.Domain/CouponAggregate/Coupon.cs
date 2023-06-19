@@ -15,7 +15,7 @@ public sealed class Coupon : IAggregateRoot<Guid>
         CouponCode code, 
         CouponPrice price, 
         CouponUsage usage,
-        IReadOnlyCollection<CouponProductCode> productCodes)
+        IEnumerable<CouponProductCode> productCodes)
     {
         if (id == Guid.Empty)
         {
@@ -30,7 +30,7 @@ public sealed class Coupon : IAggregateRoot<Guid>
         Code = code;
         Price = price;
         Usage = usage;
-        ProductCodes = productCodes;
+        ProductCodes = productCodes.ToList();
     }
 
     public Guid Id { get; private set; }
@@ -85,14 +85,14 @@ public sealed class Coupon : IAggregateRoot<Guid>
 
     public void DecrementUsage()
     {
-        Usage = new CouponUsage(Usage.MaxUsages, Usage.Usages - 1);        
+        Usage = new CouponUsage(Usage.MaxUsages, Usage.Usages - 1);
     }
 
     public void UpdateProductCodes(IEnumerable<CouponProductCode> productCodes)
     {
         ValidateProductCodes(productCodes);
 
-        ProductCodes = new ReadOnlyCollection<CouponProductCode>(productCodes.ToArray());
+        ProductCodes = productCodes.ToList();
     }
 
     private static void ValidateProductCodes(IEnumerable<CouponProductCode> productCodes)

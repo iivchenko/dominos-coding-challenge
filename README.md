@@ -1,3 +1,5 @@
+[Link](doc/implementation-explanations.md) to the document where I (Ivan Ivchenko) provid small setup instructions, explain decisions I made and further improvements/developments I would introduce if I have more time.
+
 # Introduction
 Thank you for taking the time to do the coding challenge. The goal of the challenge is to assess your engineering skills.<br/>
 The base challenge should take you 2 hours, but we would like to encourage you to spend more time on it, so we can better assess your level.
@@ -10,7 +12,7 @@ Furthermore, we expect you to write the solution in such a way that you are prou
 It is important to note that we would like to see different skills. We don't want you to waste time on repetitive tasks. If you have proven that you can do it once or twice, we know you can do it multiple times (Just make sure you mention it with a comment in the code why you didn't do it. This shows that you have thought about it). 
 
 # The code
-This repository contains a simple web API that has some endpoints that are not (fully) implemented. You are free to do anything you like to the solution, except for changing the contracts and endpoints of the API (as we will be running some automated tests).<br/><br/>
+This repository contains a simple web API that has some endpoints that are not (fully) implemented. You are free to do anything you like to the solution, except for changing the contracts and endpoints of the API (as we will be running some autAnotomated tests).11<br/>
 
 Additionally, we have added some comments in the code indicating bugs or small challenges we would like to solve. Please don't remove the comment, but you can do anything underneath it to solve the bug. Additionally, please provide what you think the problem was and why you think your change solved it.<br/><br/>
 

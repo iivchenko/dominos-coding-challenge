@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using CodingChallenge.Domain.CouponAggregate;
+using System.Reflection.Emit;
+using System;
 
 namespace CodingChallenge.Infrastructure.CouponAggregate;
 
@@ -62,5 +64,10 @@ public sealed class CouponConfiguration : IEntityTypeConfiguration<Coupon>
                     y.ToTable(nameof(Coupon.ProductCodes));
                     y.WithOwner().HasForeignKey("CouponId");
                 });
+
+        builder
+            .Property<byte[]>("Version")
+            .IsRowVersion()
+            .HasColumnName("Version");
     }
 }

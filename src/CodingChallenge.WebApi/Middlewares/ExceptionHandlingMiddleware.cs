@@ -1,6 +1,8 @@
-﻿using CodingChallenge.Domain.Common;
+﻿using CodingChallenge.Application.Common;
+using CodingChallenge.Domain.Common;
 using FluentValidation;
 using System.Text.Json;
+
 namespace CodingChallenge.WebApi.Middlewares;
 
 public sealed class ExceptionHandlingMiddleware
@@ -18,7 +20,8 @@ public sealed class ExceptionHandlingMiddleware
         {
             await _next(context);
         }
-        catch (DomainException e)
+        catch (Exception e) when (e is DomainException ||
+                                  e is CodingChallengeApplicationExcepton)
         {
             context.Response.StatusCode = StatusCodes.Status400BadRequest;
             context.Response.ContentType = "application/json";

@@ -1,4 +1,5 @@
-﻿using CodingChallenge.Domain.CouponAggregate;
+﻿using CodingChallenge.Application.Common;
+using CodingChallenge.Domain.CouponAggregate;
 using Microsoft.EntityFrameworkCore;
 
 namespace CodingChallenge.Infrastructure.CouponAggregate;
@@ -37,7 +38,14 @@ public sealed class CouponRepository : ICouponRepository
     {
         var entity = _context.Coupons.Update(coupon).Entity;
 
-        await _context.SaveChangesAsync();
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            throw new CodingChallengeApplicationExcepton($"Can't update entity with id '{coupon.Id}' due to concurrency issues!");
+        }
 
         return entity;
     }

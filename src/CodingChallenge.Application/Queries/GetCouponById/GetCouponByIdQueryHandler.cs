@@ -14,22 +14,20 @@ public sealed class GetCouponByIdQueryHandler : IRequestHandler<GetCouponByIdQue
 
     public async Task<GetCouponByIdQueryResponse> Handle(GetCouponByIdQuery request, CancellationToken cancellationToken)
     {
-        var coupon = await _couponRepository.FindById(request.Id);
-
-        if (coupon == null)
+        if (await _couponRepository.FindById(request.Id) is Coupon coupon)
         {
-            throw new CodingChallengeApplicationExcepton($"Coupon with id '{request.Id}' doesn't exist!");
+            return new GetCouponByIdQueryResponse(
+                coupon.Id,
+                coupon.Name,
+                coupon.Description,
+                coupon.Code,
+                coupon.Price,
+                coupon.Usage.MaxUsages,
+                coupon.Usage.Usages,
+                coupon.ProductCodes.Select(x => x.Value));
         }
 
-        return new GetCouponByIdQueryResponse(
-            coupon.Id,
-            coupon.Name,
-            coupon.Description,
-            coupon.Code,
-            coupon.Price,
-            coupon.Usage.MaxUsages,
-            coupon.Usage.Usages,
-            coupon.ProductCodes.Select(x => x.Value));
+        throw new CodingChallengeApplicationExcepton($"Coupon with id '{request.Id}' doesn't exist!");
     }
 }
 

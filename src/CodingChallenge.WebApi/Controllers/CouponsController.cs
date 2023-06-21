@@ -99,7 +99,6 @@ public class CouponsController : ControllerBase
            commandResponse.Usages,
            commandResponse.ProductCodes.ToArray());
 
-
         return commandResponse.Status switch
         {
             CreateOrUpdateCouponCommandResponseStatus.Created => Created($"/coupons/{response.Id}", response),

@@ -17,22 +17,7 @@ public sealed class CreateOrUpdateCouponCommandHandler : IRequestHandler<CreateO
 
     public async Task<CreateOrUpdateCouponCommandResponse> Handle(CreateOrUpdateCouponCommand request, CancellationToken cancellationToken)
     {
-        var coupon = await _couponRepository.FindById(request.Id);
-
-        if (coupon == null)
-        {
-            var newCoupon = Coupon.Create(
-                request.Id,
-                request.Name,
-                request.Description,
-                request.Code,
-                request.Price,
-                request.MaxUsages,
-                request.ProductCodes);
-
-            return MapResponse(await _couponRepository.Create(newCoupon), CreateOrUpdateCouponCommandResponseStatus.Created);
-        }
-        else
+        if (await _couponRepository.FindById(request.Id) is Coupon coupon)
         {
             coupon.UpdateName(request.Name);
             coupon.UpdateDescription(request.Description);
@@ -49,7 +34,20 @@ public sealed class CreateOrUpdateCouponCommandHandler : IRequestHandler<CreateO
                 coupon.DecrementUsage();
             }
 
-            return MapResponse(await _couponRepository.Update(coupon), CreateOrUpdateCouponCommandResponseStatus.Updated);
+            return MapResponse(await _couponRepository.Update(coupon), CreateOrUpdateCouponCommandResponseStatus.Updated);            
+        }
+        else
+        {
+            var newCoupon = Coupon.Create(
+                request.Id,
+                request.Name,
+                request.Description,
+                request.Code,
+                request.Price,
+                request.MaxUsages,
+                request.ProductCodes);
+
+            return MapResponse(await _couponRepository.Create(newCoupon), CreateOrUpdateCouponCommandResponseStatus.Created);
         }
     }
 

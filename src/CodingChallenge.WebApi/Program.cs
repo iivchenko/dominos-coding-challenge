@@ -6,7 +6,7 @@ builder
     .Services
     .AddInfrastructureServices(builder.Configuration)
     .AddApplicationServices()
-    .AddWebApiServices();
+    .AddWebApiServices(builder.Configuration);
 
 var app = builder.Build();
 
@@ -20,6 +20,7 @@ app
     .UseHttpsRedirection()
     .UseApiKeyAuthentication()
     .UseAppExceptionHandling()
+    .UseOutputCache()
     .UseAuthorization();
 
 app.MapControllers();

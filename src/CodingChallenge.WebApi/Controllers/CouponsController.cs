@@ -7,6 +7,7 @@ using CodingChallenge.Application.Queries.GetCouponById;
 using CodingChallenge.WebApi.Models;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 
 namespace CodingChallenge.WebApi.Controllers;
 
@@ -23,6 +24,7 @@ public class CouponsController : ControllerBase
 
     [HttpGet]
     [Route("")]
+    [OutputCache]
     public async Task<ActionResult<Coupon>> GetCouponByCouponCode(string couponCode)
     {
         var query = new GetCouponByCodeQuery(couponCode);
@@ -42,6 +44,7 @@ public class CouponsController : ControllerBase
 
     [HttpGet]
     [Route("{id}")]
+    [OutputCache]
     public async Task<ActionResult<Coupon>> GetCoupon(Guid id)
     {
         var query = new GetCouponByIdQuery(id);

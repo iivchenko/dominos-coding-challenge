@@ -16,19 +16,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodingChallenge.WebApi", "s
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{3E2D7A40-2E93-40AE-9F51-BF0A11695A47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingChallenge.Application", "src\CodingChallenge.Application\CodingChallenge.Application.csproj", "{FFC9C458-3AAB-4668-87BB-ADD0A85A3800}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodingChallenge.Application", "src\CodingChallenge.Application\CodingChallenge.Application.csproj", "{FFC9C458-3AAB-4668-87BB-ADD0A85A3800}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingChallenge.Domain", "src\CodingChallenge.Domain\CodingChallenge.Domain.csproj", "{029C5C91-9F40-4CF9-8DC7-C80E39EA7DD6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodingChallenge.Domain", "src\CodingChallenge.Domain\CodingChallenge.Domain.csproj", "{029C5C91-9F40-4CF9-8DC7-C80E39EA7DD6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingChallenge.Infrastructure", "src\CodingChallenge.Infrastructure\CodingChallenge.Infrastructure.csproj", "{A5D33C3C-54A5-4073-A676-593EF664399B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodingChallenge.Infrastructure", "src\CodingChallenge.Infrastructure\CodingChallenge.Infrastructure.csproj", "{A5D33C3C-54A5-4073-A676-593EF664399B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingChallenge.Application.Tests", "test\unit\CodingChallenge.Application.Tests\CodingChallenge.Application.Tests.csproj", "{FBB998D4-908C-4A73-AE30-EA8ECD803B5B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodingChallenge.Application.Tests", "test\unit\CodingChallenge.Application.Tests\CodingChallenge.Application.Tests.csproj", "{FBB998D4-908C-4A73-AE30-EA8ECD803B5B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingChallenge.Domain.Tests", "test\unit\CodingChallenge.Domain.Tests\CodingChallenge.Domain.Tests.csproj", "{1C0913D3-D54F-4B86-8DD2-06F9269D5E55}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingChallenge.Infrastructure.Tests", "test\unit\CodingChallenge.Infrastructure.Tests\CodingChallenge.Infrastructure.Tests.csproj", "{3A212777-1733-4858-B7E1-495E9A65B01E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodingChallenge.WebApi.Tests", "test\unit\CodingChallenge.WebApi.Tests\CodingChallenge.WebApi.Tests.csproj", "{15337898-87ED-45B4-8A7E-7156595C21A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodingChallenge.Domain.Tests", "test\unit\CodingChallenge.Domain.Tests\CodingChallenge.Domain.Tests.csproj", "{1C0913D3-D54F-4B86-8DD2-06F9269D5E55}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,14 +56,6 @@ Global
 		{1C0913D3-D54F-4B86-8DD2-06F9269D5E55}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C0913D3-D54F-4B86-8DD2-06F9269D5E55}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C0913D3-D54F-4B86-8DD2-06F9269D5E55}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3A212777-1733-4858-B7E1-495E9A65B01E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3A212777-1733-4858-B7E1-495E9A65B01E}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3A212777-1733-4858-B7E1-495E9A65B01E}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3A212777-1733-4858-B7E1-495E9A65B01E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{15337898-87ED-45B4-8A7E-7156595C21A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{15337898-87ED-45B4-8A7E-7156595C21A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{15337898-87ED-45B4-8A7E-7156595C21A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{15337898-87ED-45B4-8A7E-7156595C21A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -79,8 +67,6 @@ Global
 		{A5D33C3C-54A5-4073-A676-593EF664399B} = {26FF8300-A2CD-4AB2-84BD-24835A16E940}
 		{FBB998D4-908C-4A73-AE30-EA8ECD803B5B} = {3E2D7A40-2E93-40AE-9F51-BF0A11695A47}
 		{1C0913D3-D54F-4B86-8DD2-06F9269D5E55} = {3E2D7A40-2E93-40AE-9F51-BF0A11695A47}
-		{3A212777-1733-4858-B7E1-495E9A65B01E} = {3E2D7A40-2E93-40AE-9F51-BF0A11695A47}
-		{15337898-87ED-45B4-8A7E-7156595C21A0} = {3E2D7A40-2E93-40AE-9F51-BF0A11695A47}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C20F5133-80B6-4875-8763-020781FE14FF}

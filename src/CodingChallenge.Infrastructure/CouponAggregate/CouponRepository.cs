@@ -4,8 +4,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CodingChallenge.Infrastructure.CouponAggregate;
 
-// iivc comment:
-// if I have more time I will implement Unit Of Work
 public sealed class CouponRepository : ICouponRepository
 {
     private readonly ApplicationDbContext _context;

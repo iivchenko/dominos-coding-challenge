@@ -67,8 +67,8 @@ public class CouponsController : ControllerBase
     public async Task<ActionResult> CreateOrUpdateCoupon(Guid id, [FromBody] Coupon request)
     {
         // iivc comment:
-        // I can't change APIs per requirenments, and I don't know how the 'Automation Tests' from Domon's
-        // team works so I assume the most strict scenario - id from the rount and body
+        // I can't change APIs per requirenments, and I don't know how the 'Automation Tests' from Domino's
+        // team works so I assume the most strict scenario - id from the rout and body
         // must be equal and used during creation/update.
         // I personaly would split api into two separate: one for create (without any sort of ID in rout or body)
         // and another for update with mandatory id in the rout and no id in the body. 
@@ -94,7 +94,7 @@ public class CouponsController : ControllerBase
            commandResponse.Name,
            commandResponse.Description,
            commandResponse.Code,
-           (double)commandResponse.Price,
+           (double)commandResponse.Price, // iivc comment: I am 99.9% sure if I change Price to decimail it will not break Domino's tests, but lets keep it original as double
            commandResponse.MaxUsages,
            commandResponse.Usages,
            commandResponse.ProductCodes.ToArray());

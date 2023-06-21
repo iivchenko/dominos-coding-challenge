@@ -27,7 +27,7 @@ app.MapControllers();
 
 // iivc comment:
 // This is not very good practice and better to have EF Migrations in place 
-// but I opt to this piece of code make things easy to run from stractch 
+// but I opt to this piece of code to make things easy to run from stratch 
 // without manual DB creation and to save some development time.
 using (var serviceScope = app.Services.GetService<IServiceScopeFactory>().CreateScope())
 {

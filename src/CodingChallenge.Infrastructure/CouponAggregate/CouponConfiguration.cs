@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using CodingChallenge.Domain.CouponAggregate;
-using System.Reflection.Emit;
-using System;
 
 namespace CodingChallenge.Infrastructure.CouponAggregate;
 
